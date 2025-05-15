@@ -2,10 +2,6 @@ package edu.miracosta.cs112.finalproject.finalproject;
 
 public class ClawMachine
 {
-    public class Claw
-    {
-
-    }
    private String[][] inventory;
    private int numOfPrizes;
    private int attempts;
