@@ -5,20 +5,40 @@ import javafx.scene.control.Label;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.io.IOException;
+import java.util.ArrayList;
+
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 
 public class MainController {
     @FXML
-    private Label welcomeText;
+    Label attemptsLabel;
     @FXML
-    private ProgressBar timerProgressBar;
+    ImageView firstPrizeImageView;
     @FXML
-    private Pane gameResults;
+    ImageView secondPrizeImageView;
     @FXML
-    private Pane gamePane;
+    ImageView thirdPrizeImageView;
+    @FXML
+    ImageView insideMachine;
+    @FXML
+    ImageView baseClawImageView;
+    @FXML
+    ImageView armClawImageView;
+    @FXML
+    ProgressBar timerProgressBar;
+    @FXML
+    Pane gameResults;
+    @FXML
+    Pane gamePane;
 
+
+    Claw base;
+    Claw.Arm arm;
+    ClawMachine clawMachine;
     public ObservableList<Node> getObservableList()
     {
         return gamePane.getChildren();
@@ -28,8 +48,17 @@ public class MainController {
     {
         //Claw image traversable
         //Claw request focus
+        baseClawImageView.setFocusTraversable(true);
+        baseClawImageView.requestFocus();
+        armClawImageView.setFocusTraversable(true);
+        armClawImageView.requestFocus();
+        base = new Claw(baseClawImageView);
+        arm = base.new Arm(armClawImageView);
+        clawMachine = new ClawMachine(this,base,arm);
+
         //initialize claw
         //initialize claw machine
+
     }
 
     public void handleExitButton()
@@ -37,19 +66,63 @@ public class MainController {
         System.exit(0);
     }
 
-    public void handleRightButton()
+    public void handleUIUpdate()
     {
+        attemptsLabel.setText("Attempts: " + arm.getAttempts());
+    }
+
+    public void handleUIResults()
+    {
+        gameResults.setVisible(true);
+        ArrayList<String> prizeResults = arm.getPrizes();
+        String imagePath1 = prizeResults.get(0);
+        Image image1 = new Image(imagePath1);
+        firstPrizeImageView.setImage(image1);
+        String imagePath2 = prizeResults.get(1);
+        Image image2 = new Image(imagePath2);
+        secondPrizeImageView.setImage(image2);
+        String imagePath3 = prizeResults.get(2);
+        Image image3 = new Image(imagePath3);
+        thirdPrizeImageView.setImage(image3);
 
     }
 
-    public void handleLeftButton()
+    public void handleKeyPressed(KeyEvent event)
     {
-
+        switch(event.getCode())
+        {
+            case UP:
+                arm.setDeltaY(-1.25);
+                break;
+            case DOWN:
+                arm.setDeltaY(1.25);
+                break;
+            case LEFT:
+                arm.setDeltaX(-1.25);
+                base.setDeltaX(-1.25);
+                break;
+            case RIGHT:
+                arm.setDeltaX(1.25);
+                base.setDeltaX(1.25);
+                break;
+            default:
+                break;
+        }
     }
 
-    public void handleGrabButton()
-    {
-
+    public void handleKeyReleased(KeyEvent event) {
+        switch (event.getCode())
+        {
+            case UP, DOWN:
+                arm.setDeltaY(0);
+                break;
+            case LEFT, RIGHT:
+                arm.setDeltaX(0);
+                base.setDeltaX(0);
+                break;
+            default:
+                break;
+        }
     }
 
 

@@ -17,7 +17,13 @@ public class Prize extends GameObject{
             "Romance"
     };
 
-    final String[] icons = {};
+    final String[] icons = {
+            "file:./src/main/resources/Images/dramaPrize.png",
+            "file:./src/main/resources/Images/comedyPrize.png",
+            "file:./src/main/resources/Images/fantasyPrize.png",
+            "file:./src/main/resources/Images/horrorPrize.png",
+            "file:./src/main/resources/Images/romancePrize.png",
+    };
     Type type;
 
     public Prize(Type type)
@@ -26,9 +32,9 @@ public class Prize extends GameObject{
         this.type = type;
         Image image = new Image(icons[this.type.ordinal()]);
         imageView = new ImageView(image);
-        imageView.setFitWidth(25);
-        imageView.setFitHeight(25);
-        setPosition((random.nextDouble(169 - 2 + 1) + 2), 182);
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        setPosition((random.nextDouble(425 - 135 + 1) + 135), 537);
     }
     public Type getType()
     {
@@ -43,6 +49,8 @@ public class Prize extends GameObject{
     @Override
     public void update()
     {
-
+        double x = imageView.getX();
+        double y = imageView.getY();
+        setPosition(x,y);
     }
 }

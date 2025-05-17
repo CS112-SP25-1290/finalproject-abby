@@ -1,157 +1,123 @@
 package edu.miracosta.cs112.finalproject.finalproject;
 
+import javafx.animation.AnimationTimer;
+import javafx.scene.Node;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class ClawMachine
 {
-   private String[][] inventory;
-   private int numOfPrizes;
-   private int attempts;
+    Random random = new Random();
+    MainController controller;
+    final double respawnReset = 10;
+    private int prizesSpawned = 0;
+    public double respawnTimer = respawnReset;
+
+    List<GameObject> updateList = new ArrayList<>();
+
+    public ClawMachine(MainController controller, Claw base, Claw.Arm arm)
+    {
+        this.controller = controller;
+        updateList.add(base);
+        updateList.add(arm);
+
+        AnimationTimer timer = new AnimationTimer()
+        {
+            @Override
+            public void handle(long now)
+            {
+                handleObjectUpdate();
+                handleCollision();
+                handlePrizeSpawn();
+                controller.handleUIUpdate();
 
 
-   public ClawMachine()
-   {
-       this.inventory = null;
-       this.numOfPrizes = 0;
-       this.attempts = 0;
-   }
+                if(arm.gameOver())
+                {
+                    this.stop();
+                    controller.handleUIResults();
+                }
+
+            }
+        };
+        timer.start();
+    }
 
 
-   public ClawMachine(String[][] inventory, int numOfPrizes, int attempts)
-   {
-       this.inventory = inventory;
-       this.numOfPrizes = numOfPrizes;
-       this.attempts = attempts;
-   }
+    public void handleObjectUpdate()
+    {
+        for (GameObject gameObject : updateList)
+        {
+            gameObject.update();
+        }
+    }
 
+    public void handlePrizeSpawn()
+    {
+        if(prizesSpawned >= 7)
+        {
+            return;
+        }
 
-   public ClawMachine(ClawMachine original)
-   {
-       if(original != null)
-       {
-           this.setAll(original.inventory, original.numOfPrizes, original.attempts);
-       }
-   }
+        respawnTimer -= 0.07;
+        if(respawnTimer <= 0)
+        {
+            respawnTimer = respawnReset;
+            int i = random.nextInt(Prize.Type.values().length);
+            Prize object = new Prize(Prize.Type.values()[i]);
+            updateList.add(object);
 
+            Node node = object.getNode();
+            controller.getObservableList().add(node);
 
-   public boolean setInventory(String[][] inventory)
-   {
-       if(inventory != null)
-       {
-           this.inventory = inventory;
-           return true;
-       }
+            prizesSpawned++;
 
+        }
+    }
 
-       return false;
-   }
+    public void handlePrizeDespawn(GameObject gameObject)
+    {
+        updateList.remove(gameObject);
+        controller.getObservableList().remove(gameObject.getNode());
+    }
 
+    public void handleCollision()
+    {
+        Claw.Arm arm = null;
+        for(GameObject object : updateList)
+        {
+            if(object instanceof Claw.Arm)
+            {
+                arm = (Claw.Arm) object;
+                break;
+            }
+        }
 
-   public boolean setNumOfPrizes(int numOfPrizes)
-   {
-       if(numOfPrizes >= 0)
-       {
-           this.numOfPrizes = numOfPrizes;
-           return true;
-       }
-       return false;
-   }
+        if(arm != null)
+        {
+            Prize prize = null;
+            for(GameObject object : updateList)
+            {
+                if(arm.isColliding(object))
+                {
+                    if(object instanceof Prize)
+                    {
+                        prize = (Prize) object;
+                    }
+                }
+            }
+            if(prize != null)
+            {
+                arm.collectPrize(prize);
+                arm.decreaseAttempts(1);
+                handlePrizeDespawn(prize);
+            }
+        }
 
+    }
 
-   public boolean setAttempts(int attempts)
-   {
-       if(attempts >= 0)
-       {
-           this.attempts = attempts;
-           return true;
-       }
-       return false;
-   }
-
-
-   public boolean setAll(String[][] inventory, int numOfPrizes, int attempts)
-   {
-       if(setInventory(inventory) && setNumOfPrizes(numOfPrizes) && setAttempts(attempts))
-       {
-           this.setInventory(inventory);
-           this.setNumOfPrizes(numOfPrizes);
-           this.setAttempts(attempts);
-           return true;
-       }
-
-
-       return false;
-   }
-
-
-   public String[][] getInventory()
-   {
-       return this.inventory;
-   }
-
-
-   public int getNumOfPrizes()
-   {
-       return this.numOfPrizes;
-   }
-
-
-   public int getAttempts()
-   {
-       return this.attempts;
-   }
-
-
-   public String toString()
-   {
-       return "" + this.inventory + ", " + this.numOfPrizes + ",  " + this.attempts;
-   }
-
-
-   public boolean equals(Object other)
-   {
-       ClawMachine otherMachine;
-       if(other == null)
-       {
-           return false;
-       }
-       else if(!(other instanceof ClawMachine))
-       {
-           return false;
-       }
-       else
-       {
-           otherMachine = (ClawMachine) other;
-           return this.inventory.equals(otherMachine.inventory) && this.numOfPrizes == otherMachine.numOfPrizes && this.attempts == otherMachine.attempts;
-       }
-   }
-
-
-   public boolean activateClaw(int row, int col)
-   {
-       this.attempts--;
-       if(row < 0 || row >= inventory.length || col < 0 || col >= inventory[row].length)
-       {
-           System.out.println("Invalid location.");
-           return false;
-       }
-       else if(inventory[row][col] != null)
-       {
-           System.out.println("Prize grabbed: " + inventory[row][col]);
-           inventory[row][col] = null;
-           numOfPrizes--;
-           return true;
-       }
-       else{
-           System.out.println("No prize in this location.");
-           return false;
-       }
-   }
-
-
-   public void updateStatus()
-   {
-       System.out.println("Number of remaining prizes: " + this.numOfPrizes);
-       System.out.println("Number of attempts: " + this.attempts);
-   }
 
 }
 
