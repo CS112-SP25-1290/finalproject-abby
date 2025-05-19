@@ -34,7 +34,7 @@ public class Prize extends GameObject{
         imageView = new ImageView(image);
         imageView.setFitWidth(50);
         imageView.setFitHeight(50);
-        setPosition((random.nextDouble(425 - 135 + 1) + 135), 537);
+        setPosition((random.nextDouble(371 - 160 + 1) + 160), 528);
     }
     public Type getType()
     {

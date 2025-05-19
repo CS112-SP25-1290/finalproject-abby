@@ -22,17 +22,19 @@
                   <Image url="@../../../../../Images/OutlineMachine.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="insideMachine" fitHeight="388.0" fitWidth="365.0" layoutX="122.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="388.0" fitWidth="365.0" layoutX="122.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../Images/InsideMachine.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="armClawImageView" fitHeight="189.0" fitWidth="162.0" layoutX="143.0" layoutY="270.0" onKeyPressed="#handleKeyPressed" onKeyReleased="#handleKeyReleased" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="insideMachine2" fitHeight="292.0" fitWidth="365.0" layoutX="122.0" layoutY="209.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="insideMachine" fitHeight="388.0" fitWidth="323.0" layoutX="122.0" layoutY="209.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="armClawImageView" fitHeight="189.0" fitWidth="162.0" layoutX="122.0" layoutY="261.0" onKeyPressed="#handleKeyPressed" onKeyReleased="#handleKeyReleased" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../Images/Arm.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="baseClawImageView" fitHeight="171.0" fitWidth="120.0" layoutX="150.0" layoutY="210.0" onKeyPressed="#handleKeyPressed" onKeyReleased="#handleKeyReleased" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="baseClawImageView" fitHeight="171.0" fitWidth="120.0" layoutX="128.0" layoutY="209.0" onKeyPressed="#handleKeyPressed" onKeyReleased="#handleKeyReleased" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../Images/BaseClaw.png" />
                </image>
@@ -57,7 +59,7 @@
                   <Image url="@../../../../../Images/Key_prize.png" />
                </image>
             </ImageView>
-            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="745.0" layoutY="784.0" mnemonicParsing="false" onAction="#handleExitButton" prefHeight="67.0" prefWidth="112.0" text="EXIT">
+            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="259.0" layoutY="734.0" mnemonicParsing="false" onAction="#handleExitButton" prefHeight="67.0" prefWidth="112.0" text="EXIT">
                <font>
                   <Font size="18.0" />
                </font>

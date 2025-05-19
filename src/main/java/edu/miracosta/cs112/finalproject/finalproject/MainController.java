@@ -4,10 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javafx.scene.input.KeyEvent;
@@ -25,11 +23,11 @@ public class MainController {
     @FXML
     ImageView insideMachine;
     @FXML
+    ImageView insideMachine2;
+    @FXML
     ImageView baseClawImageView;
     @FXML
     ImageView armClawImageView;
-    @FXML
-    ProgressBar timerProgressBar;
     @FXML
     Pane gameResults;
     @FXML
@@ -46,19 +44,20 @@ public class MainController {
 
     public void initialize()
     {
-        //Claw image traversable
-        //Claw request focus
         baseClawImageView.setFocusTraversable(true);
         baseClawImageView.requestFocus();
+
         armClawImageView.setFocusTraversable(true);
         armClawImageView.requestFocus();
-        base = new Claw(baseClawImageView);
-        arm = base.new Arm(armClawImageView);
+
+        gamePane.setFocusTraversable(true);
+        gamePane.requestFocus();
+        gamePane.setOnKeyPressed(this::handleKeyPressed);
+        gamePane.setOnKeyReleased(this::handleKeyReleased);
+
+        base = new Claw(baseClawImageView,insideMachine);
+        arm = base.new Arm(armClawImageView,insideMachine2);
         clawMachine = new ClawMachine(this,base,arm);
-
-        //initialize claw
-        //initialize claw machine
-
     }
 
     public void handleExitButton()

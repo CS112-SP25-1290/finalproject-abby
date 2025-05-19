@@ -4,13 +4,15 @@ import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Claw extends GameObject{
-
+public class Claw extends GameObject
+{
     public static final int MAX_ATTEMPTS = 3;
+    private ImageView boundaryImageView;
     public double deltaX;
 
     public class Arm extends GameObject
     {
+        private ImageView boundaryImageView;
         private double deltaY;
         public int attempts;
         List<Prize> drama = new ArrayList<>();
@@ -19,10 +21,11 @@ public class Claw extends GameObject{
         List<Prize> romance = new ArrayList<>();
         List<Prize> comedy = new ArrayList<>();
 
-        public Arm(ImageView armImageView)
+        public Arm(ImageView armImageView, ImageView boundaryImageView)
         {
             super();
             this.imageView = armImageView;
+            this.boundaryImageView = boundaryImageView;
             this.attempts = MAX_ATTEMPTS;
             setPosition(0,0);//re-adjust position
         }
@@ -47,6 +50,31 @@ public class Claw extends GameObject{
         {
             double x = imageView.getX() + deltaX;
             double y = imageView.getY() + deltaY;
+
+            double armWidth = imageView.getFitWidth();
+            double armHeight = imageView.getFitHeight();
+
+            double boundaryWidth = boundaryImageView.getFitWidth();
+            double boundaryHeight = boundaryImageView.getFitHeight();
+
+            if(x < 0)
+            {
+                x = 0;
+            }
+            else if((x + armWidth) > boundaryWidth)
+            {
+                x = boundaryWidth - armWidth;
+            }
+
+            if(y < 0)
+            {
+                y = 0;
+            }
+            else if((y + armHeight) > boundaryHeight)
+            {
+                y = boundaryHeight - armHeight;
+            }
+
             setPosition(x,y);
         }
 
@@ -121,7 +149,7 @@ public class Claw extends GameObject{
             }
             if(!drama.isEmpty())
             {
-                int amount = getComedyCount();
+                int amount = getDramaCount();
                 while(amount > 0)
                 {
                     icons.add("file:./src/main/resources/Images/dramaPrize.png");
@@ -161,10 +189,11 @@ public class Claw extends GameObject{
     }
 
 
-    public Claw(ImageView clawImageView)
+    public Claw(ImageView clawImageView, ImageView boundaryImageView)
     {
         super();
         this.imageView = clawImageView;
+        this.boundaryImageView = boundaryImageView;
         setPosition(0,0);
     }
 
@@ -172,14 +201,25 @@ public class Claw extends GameObject{
     {
         this.deltaX = deltaX;
     }
-    
 
     @Override
     public void update()
     {
         double x = imageView.getX() + deltaX;
-        setPosition(x, 0);
 
+        double baseWidth = imageView.getFitWidth();
+        double boundaryWidth = boundaryImageView.getFitWidth();
+
+        if(x < 0)
+        {
+            x = 0;
+        }
+        else if((x + baseWidth) > boundaryWidth)
+        {
+            x = boundaryWidth - baseWidth;
+        }
+
+        setPosition(x,imageView.getY());
     }
 
 }
